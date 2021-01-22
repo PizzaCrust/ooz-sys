@@ -4,7 +4,9 @@ use std::fs::DirEntry;
 use diffy::{Patch, apply, ApplyError};
 
 fn main() -> anyhow::Result<()> {
-    println!("cargo:rerun-if-changed=build.rs");
+    if Path::new("ooz/kraken_patched.cpp").exists() {
+        return Ok(())
+    }
     if !Path::new("ooz/kraken.cpp").exists() {
         panic!("Kraken.cpp doesn't exist. Please fetch git submodules.")
     }
@@ -12,7 +14,8 @@ fn main() -> anyhow::Result<()> {
     let patch = Patch::from_str(&patch)?;
     let text = std::fs::read_to_string("ooz/kraken.cpp")?;
     let text = apply(&text, &patch)?;
-    std::fs::write("ooz/kraken.cpp", text)?;
+    std::fs::write("ooz/kraken_patched.cpp", text)?;
+    std::fs::remove_file("ooz/kraken.cpp")?;
     Build::new()
         .cpp(true)
         .files(std::fs::read_dir("ooz")?.filter_map(|x| match x {
