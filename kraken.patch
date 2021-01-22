@@ -17,9 +17,9 @@
 +
    // Length stream
    const byte *length_stream;
- 
+
 @@ -126,7 +126,7 @@
- 
+
    // Far offsets for current chunk
    uint32 *off32_stream, *off32_stream_end;
 -  
@@ -80,20 +80,20 @@
 +
    if (!Huff_MakeLut(code_prefix_org, code_prefix, &huff_lut, syms))
      return -1;
- 
+
 @@ -1359,7 +1359,7 @@
- 
+
    if (src_end - src < 3)
      return -1;
 -  
 +
    int Q = *(uint16*)src;
    src += 2;
- 
+
 @@ -1382,7 +1382,7 @@
    uint8 *interval_indexes = scratch_cur;
    scratch_cur += num_indexes;
- 
+
 - 
 +
    if (Q & 0x8000) {
@@ -104,7 +104,7 @@
    uint32 bits_b = 0;
    int bitpos_b = 24;
 -  
- 
+
 +
    int i;
    for (i = 0; i + 2 <= num_lens; i += 2) {
@@ -152,7 +152,7 @@
 -  
 +
    int L_bits = BitReader_ReadBitsNoRefill(&br, 2) + 8;
- 
+
    if (!Tans_DecodeTable(&br, L_bits, &tans_data))
 @@ -2224,7 +2224,7 @@
    BitReader bits_a, bits_b;
@@ -191,7 +191,7 @@
           *u32_len_stream_end = u32_len_stream_buf + u32_len_stream_size;
    for (i = 0; i + 1 < u32_len_stream_size; i += 2) {
 @@ -2551,7 +2551,7 @@
- 
+
  // Note: may access memory out of bounds on invalid input.
  bool Kraken_ProcessLzRuns_Type1(KrakenLzTable *lzt, byte *dst, byte *dst_end, byte *dst_start) {
 -  const byte *cmd_stream = lzt->cmd_stream, 
@@ -208,12 +208,12 @@
      // use cmov
      uint32 next_long_length = *len_stream;
      const int *next_len_stream = len_stream + 1;
- 
+
 -    len_stream = (litlen == 3) ? next_len_stream : len_stream; 
 +    len_stream = (litlen == 3) ? next_len_stream : len_stream;
      litlen = (litlen == 3) ? next_long_length : litlen;
      recent_offs[6] = *offs_stream;
- 
+
 @@ -2605,7 +2605,7 @@
      recent_offs[offs_index + 2] = recent_offs[offs_index + 1];
      recent_offs[offs_index + 1] = recent_offs[offs_index + 0];
@@ -221,10 +221,10 @@
 -    
 +
      offs_stream = (int*)((intptr_t)offs_stream + ((offs_index + 1) & 4));
- 
+
      if ((uintptr_t)offset < (uintptr_t)(dst_start - dst))
 @@ -2892,7 +2892,7 @@
- 
+
    finline LeviathanModeRaw(LeviathanLzTable *lzt, uint8 *dst_start) : lit_stream(lzt->lit_stream[0]) {
    }
 -  
@@ -235,7 +235,7 @@
 @@ -2992,7 +2992,7 @@
  struct LeviathanModeLamSub {
    const uint8 *lit_stream, *lam_lit_stream;
- 
+
 -  finline LeviathanModeLamSub(LeviathanLzTable *lzt, uint8 *dst_start) 
 +  finline LeviathanModeLamSub(LeviathanLzTable *lzt, uint8 *dst_start)
      : lit_stream(lzt->lit_stream[0]),
@@ -249,7 +249,7 @@
 +
      if (litlen-- == 0)
        return false; // lamsub mode requires one literal
- 
+
 @@ -3094,7 +3094,7 @@
  struct LeviathanModeSubAndF {
    enum { NUM = 16, MASK = NUM - 1};
@@ -278,7 +278,7 @@
    const int *offs_stream_end = offs_stream + lzt->offs_stream_size;
    const byte *copyfrom;
 @@ -3214,7 +3214,7 @@
- 
+
    for(;;) {
      uint32 cmd;
 -    
@@ -351,7 +351,7 @@
        lz->off32_stream_end = lz->off32_stream_1 + lz->off32_size_1 * 4;
 @@ -3922,7 +3922,7 @@
      }
- 
+
      if (mode == 0) {
 -      src_cur = Mermaid_Mode0(dst, dst_size_cur, dst_end, dst_start, src_end, lz, &saved_dist, 
 +      src_cur = Mermaid_Mode0(dst, dst_size_cur, dst_end, dst_start, src_end, lz, &saved_dist,
@@ -375,7 +375,7 @@
 +
    if (qhdr.compressed_size > (uint32)dst_bytes_left)
      return false;
- 
+
 @@ -4127,8 +4127,14 @@
    dec->dst_used = dst_bytes_left;
    return true;
@@ -409,7 +409,7 @@
 @@ -4340,141 +4346,7 @@
  int CompressBlock(int codec_id, uint8 *src_in, uint8 *dst_in, int src_size, int level,
                    const CompressOptions *compressopts, uint8 *src_window_base, LRMCascade *lrm);
- 
+
 -int main(int argc, char *argv[]) {
 -  int64_t start, end, freq;
 -  int argi;

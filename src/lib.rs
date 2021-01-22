@@ -16,6 +16,28 @@ pub struct CompressOptions {
     hash_bits: i32
 }
 
+#[repr(i32)]
+pub enum Compressor {
+    Kraken = 8,
+    Mermaid = 9,
+    Selkie = 11,
+    Leviathan = 13
+}
+
+#[repr(i32)]
+pub enum CompressorLevel {
+    None,
+    SuperFast,
+    VeryFast,
+    Fast,
+    Normal,
+    Optimal1,
+    Optimal2,
+    Optimal3,
+    Optimal4,
+    Optimal5
+}
+
 #[link(name = "ooz")]
 extern "C" {
     pub fn Kraken_Decompress(
@@ -24,21 +46,22 @@ extern "C" {
         dst: *mut u8,
         dst_len: usize
     ) -> i32;
-    pub fn CompressBlock(
-        codec_id: i32,
+    pub fn Compress(
+        codec_id: Compressor,
         src_in: *const u8,
         dst_in: *mut u8,
         src_size: i32,
-        level: i32,
+        level: CompressorLevel,
         compress_options: *const CompressOptions,
         src_window_base: *const u8,
         lrm: *const c_void
-    );
+    ) -> i32;
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::Kraken_Decompress;
+    use crate::{Kraken_Decompress, Compress, Compressor, CompressorLevel};
+    use std::ptr;
 
     #[test]
     fn unsafe_decompress() {
@@ -46,5 +69,24 @@ mod tests {
         let mut dst = vec![0u8; 405273];
         let result = unsafe { Kraken_Decompress(src.as_ptr(), src.len(), dst.as_mut_ptr(), dst.len()) };
         assert_eq!(result as usize, dst.len());
+    }
+
+    #[test]
+    fn unsafe_compress() {
+        let src = std::fs::read("kraken.patch").unwrap();
+        let mut dst = vec![0u8; src.len() + 65536];
+        let result = unsafe {
+            Compress(
+                Compressor::Kraken,
+                src.as_ptr(),
+                dst.as_mut_ptr(),
+                src.len() as i32,
+                CompressorLevel::Optimal1,
+                ptr::null(),
+                ptr::null(),
+                ptr::null()
+            )
+        };
+        assert!(result > 0);
     }
 }
