@@ -1,15 +1,33 @@
---- kraken.cpp	2021-01-22 15:10:44.396325000 +0700
-+++ kraken_new.cpp	2021-01-22 15:12:09.824219000 +0700
-@@ -4340,141 +4340,5 @@
+--- kraken.cpp	2021-01-22 15:51:57.457422400 +0700
++++ kraken_new.cpp	2021-01-22 15:51:11.278124600 +0700
+@@ -4127,8 +4127,16 @@
+   dec->dst_used = dst_bytes_left;
+   return true;
+ }
++
++#if defined(_MSC_VER)
++    //  Microsoft
++    #define EXPORT extern "C" __declspec(dllexport)
++#elif defined(__GNUC__)
++    //  GCC
++    #define EXPORT extern "C" __attribute__((visibility("default")))
++#endif
+   
+-int Kraken_Decompress(const byte *src, size_t src_len, byte *dst, size_t dst_len) {
++EXPORT int Kraken_Decompress(const byte *src, size_t src_len, byte *dst, size_t dst_len) {
+   KrakenDecoder *dec = Kraken_Create();
+   int offset = 0;
+   while (dst_len != 0) {
+@@ -4340,141 +4348,5 @@
  int CompressBlock(int codec_id, uint8 *src_in, uint8 *dst_in, int src_size, int level,
                    const CompressOptions *compressopts, uint8 *src_window_base, LRMCascade *lrm);
  
 -int main(int argc, char *argv[]) {
 -  int64_t start, end, freq;
 -  int argi;
- 
--  if (argc < 2 || 
--      (argi = ParseCmdLine(argc, argv)) < 0 || 
+-
+-  if (argc < 2 ||
+-      (argi = ParseCmdLine(argc, argv)) < 0 ||
 -      argi >= argc ||  // no files
 -      (arg_direction != 'b' && (argc - argi) > 2) ||  // too many files
 -      (arg_direction == 't' && (argc - argi) != 2)     // missing argument for verify
@@ -42,7 +60,7 @@
 -  }
 -
 -  int nverify = 0;
--
+ 
 -  for (; argi < argc; argi++) {
 -    const char *curfile = argv[argi];
 -
@@ -79,9 +97,9 @@
 -      // stupidly attempt to autodetect if file uses 4-byte or 8-byte header,
 -      // the previous version of this tool wrote a 4-byte header.
 -      int hdrsize = *(uint64*)input >= 0x10000000000 ? 4 : 8;
--      
+-
 -      uint64 unpacked_size = (hdrsize == 8) ? *(uint64*)input : *(uint32*)input;
--      if (unpacked_size > (hdrsize == 4 ? 52*1024*1024 : 1024 * 1024 * 1024)) 
+-      if (unpacked_size > (hdrsize == 4 ? 52*1024*1024 : 1024 * 1024 * 1024))
 -        error("file too large", curfile);
 -      output = new byte[unpacked_size + SAFE_SPACE];
 -      if (!output) error("memory error", curfile);
