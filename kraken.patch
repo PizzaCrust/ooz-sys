@@ -1,24 +1,21 @@
---- kraken.cpp	2021-01-22 15:51:57.457422400 +0700
-+++ kraken_new.cpp	2021-01-22 15:51:11.278124600 +0700
-@@ -4127,8 +4127,16 @@
-   dec->dst_used = dst_bytes_left;
+--- original
++++ modified
+@@ -4128,7 +4128,13 @@
    return true;
  }
-+
+ 
+-int Kraken_Decompress(const byte *src, size_t src_len, byte *dst, size_t dst_len) {
 +#if defined(_MSC_VER)
-+    //  Microsoft
 +    #define EXPORT extern "C" __declspec(dllexport)
 +#elif defined(__GNUC__)
-+    //  GCC
 +    #define EXPORT extern "C" __attribute__((visibility("default")))
 +#endif
-   
--int Kraken_Decompress(const byte *src, size_t src_len, byte *dst, size_t dst_len) {
++
 +EXPORT int Kraken_Decompress(const byte *src, size_t src_len, byte *dst, size_t dst_len) {
    KrakenDecoder *dec = Kraken_Create();
    int offset = 0;
    while (dst_len != 0) {
-@@ -4340,141 +4348,5 @@
+@@ -4340,141 +4346,7 @@
  int CompressBlock(int codec_id, uint8 *src_in, uint8 *dst_in, int src_size, int level,
                    const CompressOptions *compressopts, uint8 *src_window_base, LRMCascade *lrm);
  
@@ -60,7 +57,7 @@
 -  }
 -
 -  int nverify = 0;
- 
+-
 -  for (; argi < argc; argi++) {
 -    const char *curfile = argv[argi];
 -
@@ -159,4 +156,9 @@
 -    fprintf(stderr, "%d files verified OK!\n", nverify);
 -  return 0;
 -}
- 
+-
++EXPORT int Compress(int codec_id, uint8 *src_in, uint8 *dst_in, int src_size, int level,
++             const CompressOptions *compressopts, uint8 *src_window_base, LRMCascade *lrm) {
++    return CompressBlock(codec_id, src_in, dst_in, src_size, level, compressopts, src_window_base, lrm);
++}
+\ No newline at end of file
