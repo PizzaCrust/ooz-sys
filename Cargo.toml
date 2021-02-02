@@ -1,6 +1,8 @@
 [package]
 name = "ooz-sys"
+description = "Bindings to rarten's ooz fork"
 version = "0.1.0"
+license-file = "LICENSE"
 authors = ["PizzaCrust <pizzacrustcoder@gmail.com>"]
 edition = "2018"
 
