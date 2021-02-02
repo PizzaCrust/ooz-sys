@@ -62,11 +62,8 @@ extern "C" {
 mod tests {
     use crate::{Kraken_Decompress, Compress, Compressor, CompressorLevel};
     use std::ptr;
-    #[cfg(target_arch = "wasm32")]
-    use wasm_bindgen_test::*;
 
     #[test]
-    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn unsafe_decompress() {
         let src = include_bytes!("../mermaid-fortnite.dump");
         let mut dst = vec![0u8; 405273];
@@ -75,7 +72,6 @@ mod tests {
     }
 
     #[test]
-    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn unsafe_compress() {
         let src = [1u8; 10_000];
         let mut dst = vec![0u8; src.len() + 65536];
