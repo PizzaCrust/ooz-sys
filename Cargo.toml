@@ -4,6 +4,8 @@ description = "Bindings to rarten's ooz fork"
 version = "0.1.0"
 license-file = "LICENSE"
 authors = ["PizzaCrust <pizzacrustcoder@gmail.com>"]
+documentation = "https://docs.rs/ooz-sys"
+homepage = "https://github.com/PizzaCrust/ooz-sys"
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
