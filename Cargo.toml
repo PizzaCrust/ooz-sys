@@ -2,6 +2,7 @@
 name = "ooz-sys"
 description = "Bindings to rarten's ooz fork"
 version = "0.1.0"
+license = "MIT"
 license-file = "LICENSE"
 authors = ["PizzaCrust <pizzacrustcoder@gmail.com>"]
 documentation = "https://docs.rs/ooz-sys"
